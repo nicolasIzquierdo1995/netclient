@@ -1,0 +1,6 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Todo.Mvc.Ui/bin/Debug/netcoreapp2.0
+/Todo.Mvc.Ui/obj
