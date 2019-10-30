@@ -4,7 +4,9 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using SmartIT.Employee.MockDB;
 using Todo.Mvc.Ui;
@@ -19,7 +21,7 @@ namespace TodoAngular.Ui.Controllers
 
 		[Route("~/api/LoginUser")]
 		[HttpPost]
-		public HttpResponseMessage LoginUser([FromBody]Credential credentials)
+		public ActionResult<string> LoginUser([FromBody]Credential credentials)
 		{
 			// si mis credenciales estan en la clase estática
 			if (Users.Login(credentials.User, credentials.Password))
@@ -29,14 +31,8 @@ namespace TodoAngular.Ui.Controllers
 
 				try
 				{
-					// se lo envio a java
 					SendTokenToServer(token);
-					var response = new HttpResponseMessage(HttpStatusCode.OK)
-					{
-						Content = new StringContent(token)
-					};
-					response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
-					return response;
+					return CreatedAtAction("pepito", new { id = "pepito" }, token);
 				}
 				catch (Exception ex)
 				{
@@ -45,7 +41,7 @@ namespace TodoAngular.Ui.Controllers
 						Content = new StringContent(ex.Message)
 					};
 					response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
-					return response;
+					return null;
 				}
 			}
 			else
@@ -55,7 +51,7 @@ namespace TodoAngular.Ui.Controllers
 					Content = new StringContent("Todo roto")
 				};
 				response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
-				return response;
+				return null;
 			}
 		}
 
